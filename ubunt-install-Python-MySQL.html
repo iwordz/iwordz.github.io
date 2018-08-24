@@ -1,0 +1,292 @@
+
+root@fanghouguo:/data# pip install MySQL-Python
+Collecting MySQL-Python
+  Using cached https://files.pythonhosted.org/packages/a5/e9/51b544da85a36a68debe7a7091f068d802fc515a3a202652828c73453cad/MySQL-python-1.2.5.zip
+    Complete output from command python setup.py egg_info:
+    sh: 1: mysql_config: not found
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/tmp/pip-build-O8Y3nt/MySQL-Python/setup.py", line 17, in <module>
+        metadata, options = get_config()
+      File "setup_posix.py", line 43, in get_config
+        libs = mysql_config("libs_r")
+      File "setup_posix.py", line 25, in mysql_config
+        raise EnvironmentError("%s not found" % (mysql_config.path,))
+    EnvironmentError: mysql_config not found
+
+    ----------------------------------------
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-O8Y3nt/MySQL-Python/
+root@fanghouguo:/data# cp /usr/local/mysql/bin/mysql
+mysql                       mysql_embedded
+mysqladmin                  mysqlimport
+mysqlbinlog                 mysql_install_db
+mysqlcheck                  mysql_plugin
+mysql_client_test_embedded  mysqlpump
+mysql_config                mysql_secure_installation
+mysql_config_editor         mysqlshow
+mysqld                      mysqlslap
+mysqld-debug                mysql_ssl_rsa_setup
+mysqld_multi                mysqltest_embedded
+mysqld_safe                 mysql_tzinfo_to_sql
+mysqldump                   mysql_upgrade
+mysqldumpslow               mysqlxtest
+
+发现找不到mysql_config文件,然后执行以下命令并继续安装发现还是爆粗。
+
+root@fanghouguo:/data# export PATH=$PATH:/user/local/mysql/bin
+root@fanghouguo:/data# pip install MySQL-Python
+Collecting MySQL-Python
+  Using cached https://files.pythonhosted.org/packages/a5/e9/51b544da85a36a68debe7a7091f068d802fc515a3a202652828c73453cad/MySQL-python-1.2.5.zip
+    Complete output from command python setup.py egg_info:
+    sh: 1: mysql_config: not found
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/tmp/pip-build-F9bhLG/MySQL-Python/setup.py", line 17, in <module>
+        metadata, options = get_config()
+      File "setup_posix.py", line 43, in get_config
+        libs = mysql_config("libs_r")
+      File "setup_posix.py", line 25, in mysql_config
+        raise EnvironmentError("%s not found" % (mysql_config.path,))
+    EnvironmentError: mysql_config not found
+
+    ----------------------------------------
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-F9bhLG/MySQL-Python/
+root@fanghouguo:/data# mysql
+mysql           mysqlcheck      mysql_embedded
+root@fanghouguo:/data# whereis mysql
+mysql: /usr/bin/mysql /usr/local/mysql /opt/mysql-5.7.23-linux-glibc2.12-x86_64/bin/mysql /usr/share/man/man1/mysql.1.gz
+root@fanghouguo:/data# echo $PATH
+/opt/apache-maven-3.5.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/jdk1.8.0_111/bin:/opt/jdk1.8.0_111/jre/bin:/user/local/mysql/bin
+
+root@fanghouguo:/data# echo $PATH
+/opt/apache-maven-3.5.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/jdk1.8.0_111/bin:/opt/jdk1.8.0_111/jre/bin:/user/local/mysql/bin
+
+通过查资料发现没有安装libmysqlclient-dev
+
+root@fanghouguo:/data# apt-get install libmysqlclient-dev
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树
+正在读取状态信息... 完成
+将会同时安装下列软件：
+  libc-dev-bin libc6-dev libmysqlclient20 linux-libc-dev mysql-common zlib1g-dev
+建议安装：
+  glibc-doc manpages-dev
+推荐安装：
+  manpages-dev
+下列【新】软件包将被安装：
+  libc-dev-bin libc6-dev libmysqlclient-dev libmysqlclient20 linux-libc-dev mysql-common zlib1g-dev
+升级了 0 个软件包，新安装了 7 个软件包，要卸载 0 个软件包，有 13 个软件包未被升级。
+需要下载 5,824 kB 的归档。
+解压缩后会消耗 36.7 MB 的额外空间。
+您希望继续执行吗？ [Y/n] Y
+获取:1 http://archive.ubuntu.com/ubuntu bionic/main amd64 libc-dev-bin amd64 2.27-3ubuntu1 [71.8 kB]
+获取:2 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 linux-libc-dev amd64 4.15.0-33.36 [1,002 kB]
+获取:3 http://archive.ubuntu.com/ubuntu bionic/main amd64 libc6-dev amd64 2.27-3ubuntu1 [2,587 kB]
+获取:4 http://archive.ubuntu.com/ubuntu bionic/main amd64 mysql-common all 5.8+1.0.4 [7,308 B]
+获取:5 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libmysqlclient20 amd64 5.7.23-0ubuntu0.18.04.1 [818 kB]
+获取:6 http://archive.ubuntu.com/ubuntu bionic/main amd64 zlib1g-dev amd64 1:1.2.11.dfsg-0ubuntu2 [176 kB]
+获取:7 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libmysqlclient-dev amd64 5.7.23-0ubuntu0.18.04.1 [1,162 kB]
+已下载 5,824 kB，耗时 3秒 (2,126 kB/s)
+正在选中未选择的软件包 libc-dev-bin。
+(正在读取数据库 ... 系统当前共安装有 108024 个文件和目录。)
+正准备解包 .../0-libc-dev-bin_2.27-3ubuntu1_amd64.deb  ...
+正在解包 libc-dev-bin (2.27-3ubuntu1) ...
+正在选中未选择的软件包 linux-libc-dev:amd64。
+正准备解包 .../1-linux-libc-dev_4.15.0-33.36_amd64.deb  ...
+正在解包 linux-libc-dev:amd64 (4.15.0-33.36) ...
+正在选中未选择的软件包 libc6-dev:amd64。
+正准备解包 .../2-libc6-dev_2.27-3ubuntu1_amd64.deb  ...
+正在解包 libc6-dev:amd64 (2.27-3ubuntu1) ...
+正在选中未选择的软件包 mysql-common。
+正准备解包 .../3-mysql-common_5.8+1.0.4_all.deb  ...
+正在解包 mysql-common (5.8+1.0.4) ...
+正在选中未选择的软件包 libmysqlclient20:amd64。
+正准备解包 .../4-libmysqlclient20_5.7.23-0ubuntu0.18.04.1_amd64.deb  ...
+正在解包 libmysqlclient20:amd64 (5.7.23-0ubuntu0.18.04.1) ...
+正在选中未选择的软件包 zlib1g-dev:amd64。
+正准备解包 .../5-zlib1g-dev_1%3a1.2.11.dfsg-0ubuntu2_amd64.deb  ...
+正在解包 zlib1g-dev:amd64 (1:1.2.11.dfsg-0ubuntu2) ...
+正在选中未选择的软件包 libmysqlclient-dev。
+正准备解包 .../6-libmysqlclient-dev_5.7.23-0ubuntu0.18.04.1_amd64.deb  ...
+正在解包 libmysqlclient-dev (5.7.23-0ubuntu0.18.04.1) ...
+正在设置 mysql-common (5.8+1.0.4) ...
+update-alternatives: 使用 /etc/mysql/my.cnf.fallback 来在自动模式中提供 /etc/mysql/my.cnf (my.cnf)
+正在设置 linux-libc-dev:amd64 (4.15.0-33.36) ...
+正在处理用于 libc-bin (2.27-3ubuntu1) 的触发器 ...
+正在处理用于 man-db (2.8.3-2) 的触发器 ...
+正在设置 libmysqlclient20:amd64 (5.7.23-0ubuntu0.18.04.1) ...
+正在设置 libc-dev-bin (2.27-3ubuntu1) ...
+正在设置 libc6-dev:amd64 (2.27-3ubuntu1) ...
+正在设置 zlib1g-dev:amd64 (1:1.2.11.dfsg-0ubuntu2) ...
+正在设置 libmysqlclient-dev (5.7.23-0ubuntu0.18.04.1) ...
+正在处理用于 libc-bin (2.27-3ubuntu1) 的触发器 ...
+root@fanghouguo:/data# updatedb
+root@fanghouguo:/data# locate mysql_config
+/opt/mysql-5.7.23-linux-glibc2.12-x86_64/bin/mysql_config
+/opt/mysql-5.7.23-linux-glibc2.12-x86_64/bin/mysql_config_editor
+/opt/mysql-5.7.23-linux-glibc2.12-x86_64/man/man1/mysql_config.1
+/opt/mysql-5.7.23-linux-glibc2.12-x86_64/man/man1/mysql_config_editor.1
+/usr/bin/mysql_config
+/usr/share/man/man1/mysql_config.1.gz
+root@fanghouguo:/data# pip install MySQL-Python
+Collecting MySQL-Python
+  Using cached https://files.pythonhosted.org/packages/a5/e9/51b544da85a36a68debe7a7091f068d802fc515a3a202652828c73453cad/MySQL-python-1.2.5.zip
+Building wheels for collected packages: MySQL-Python
+  Running setup.py bdist_wheel for MySQL-Python ... error
+  Complete output from command /usr/bin/python -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-9vvqMl/MySQL-Python/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" bdist_wheel -d /tmp/tmpE8aLn_pip-wheel- --python-tag cp27:
+  usage: -c [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+     or: -c --help [cmd1 cmd2 ...]
+     or: -c --help-commands
+     or: -c cmd --help
+
+  error: invalid command 'bdist_wheel'
+
+  ----------------------------------------
+  Failed building wheel for MySQL-Python
+  Running setup.py clean for MySQL-Python
+Failed to build MySQL-Python
+Installing collected packages: MySQL-Python
+  Running setup.py install for MySQL-Python ... error
+    Complete output from command /usr/bin/python -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-9vvqMl/MySQL-Python/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" install --record /tmp/pip-SLkgg7-record/install-record.txt --single-version-externally-managed --compile:
+    running install
+    running build
+    running build_py
+    creating build
+    creating build/lib.linux-x86_64-2.7
+    copying _mysql_exceptions.py -> build/lib.linux-x86_64-2.7
+    creating build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/__init__.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/converters.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/connections.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/cursors.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/release.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/times.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    creating build/lib.linux-x86_64-2.7/MySQLdb/constants
+    copying MySQLdb/constants/__init__.py -> build/lib.linux-x86_64-2.7/MySQLdb/constants
+    copying MySQLdb/constants/CR.py -> build/lib.linux-x86_64-2.7/MySQLdb/constants
+    copying MySQLdb/constants/FIELD_TYPE.py -> build/lib.linux-x86_64-2.7/MySQLdb/constants
+    copying MySQLdb/constants/ER.py -> build/lib.linux-x86_64-2.7/MySQLdb/constants
+    copying MySQLdb/constants/FLAG.py -> build/lib.linux-x86_64-2.7/MySQLdb/constants
+    copying MySQLdb/constants/REFRESH.py -> build/lib.linux-x86_64-2.7/MySQLdb/constants
+    copying MySQLdb/constants/CLIENT.py -> build/lib.linux-x86_64-2.7/MySQLdb/constants
+    running build_ext
+    building '_mysql' extension
+    creating build/temp.linux-x86_64-2.7
+    x86_64-linux-gnu-gcc -pthread -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fno-strict-aliasing -Wdate-time -D_FORTIFY_SOURCE=2 -g -fdebug-prefix-map=/build/python2.7-nbjU53/python2.7-2.7.15~rc1=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Dversion_info=(1,2,5,'final',1) -D__version__=1.2.5 -I/usr/include/mysql -I/usr/include/python2.7 -c _mysql.c -o build/temp.linux-x86_64-2.7/_mysql.o
+    unable to execute 'x86_64-linux-gnu-gcc': No such file or directory
+    error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
+正准备解包 .../17-libcilkrts5_7.3.0-16ubuntu3_amd64.deb  ...
+正在解包 libcilkrts5:amd64 (7.3.0-16ubuntu3) ...
+正在选中未选择的软件包 libmpx2:amd64。
+正准备解包 .../18-libmpx2_8-20180414-1ubuntu2_amd64.deb  ...
+正在解包 libmpx2:amd64 (8-20180414-1ubuntu2) ...
+正在选中未选择的软件包 libquadmath0:amd64。
+正准备解包 .../19-libquadmath0_8-20180414-1ubuntu2_amd64.deb  ...
+正在解包 libquadmath0:amd64 (8-20180414-1ubuntu2) ...
+正在选中未选择的软件包 libgcc-7-dev:amd64。
+正准备解包 .../20-libgcc-7-dev_7.3.0-16ubuntu3_amd64.deb  ...
+正在解包 libgcc-7-dev:amd64 (7.3.0-16ubuntu3) ...
+正在选中未选择的软件包 gcc-7。
+正准备解包 .../21-gcc-7_7.3.0-16ubuntu3_amd64.deb  ...
+正在解包 gcc-7 (7.3.0-16ubuntu3) ...
+正在选中未选择的软件包 gcc。
+正准备解包 .../22-gcc_4%3a7.3.0-3ubuntu2_amd64.deb  ...
+正在解包 gcc (4:7.3.0-3ubuntu2) ...
+正在设置 libquadmath0:amd64 (8-20180414-1ubuntu2) ...
+正在设置 libgomp1:amd64 (8-20180414-1ubuntu2) ...
+正在设置 libatomic1:amd64 (8-20180414-1ubuntu2) ...
+正在设置 libcc1-0:amd64 (8-20180414-1ubuntu2) ...
+正在设置 libtsan0:amd64 (8-20180414-1ubuntu2) ...
+正在设置 liblsan0:amd64 (8-20180414-1ubuntu2) ...
+正在设置 gcc-7-base:amd64 (7.3.0-16ubuntu3) ...
+正在设置 binutils-common:amd64 (2.30-20ubuntu2~18.04) ...
+正在设置 libmpx2:amd64 (8-20180414-1ubuntu2) ...
+正在处理用于 libc-bin (2.27-3ubuntu1) 的触发器 ...
+正在处理用于 man-db (2.8.3-2) 的触发器 ...
+正在设置 libmpc3:amd64 (1.1.0-1) ...
+正在设置 libitm1:amd64 (8-20180414-1ubuntu2) ...
+正在设置 libisl19:amd64 (0.19-1) ...
+正在设置 libasan4:amd64 (7.3.0-16ubuntu3) ...
+正在设置 libbinutils:amd64 (2.30-20ubuntu2~18.04) ...
+正在设置 libcilkrts5:amd64 (7.3.0-16ubuntu3) ...
+正在设置 libubsan0:amd64 (7.3.0-16ubuntu3) ...
+正在设置 libgcc-7-dev:amd64 (7.3.0-16ubuntu3) ...
+正在设置 cpp-7 (7.3.0-16ubuntu3) ...
+正在设置 binutils-x86-64-linux-gnu (2.30-20ubuntu2~18.04) ...
+正在设置 cpp (4:7.3.0-3ubuntu2) ...
+正在设置 binutils (2.30-20ubuntu2~18.04) ...
+正在设置 gcc-7 (7.3.0-16ubuntu3) ...
+正在设置 gcc (4:7.3.0-3ubuntu2) ...
+正在处理用于 libc-bin (2.27-3ubuntu1) 的触发器 ...
+root@fanghouguo:/data# pip install MySQL-Python
+Collecting MySQL-Python
+  Using cached https://files.pythonhosted.org/packages/a5/e9/51b544da85a36a68debe7a7091f068d802fc515a3a202652828c73453cad/MySQL-python-1.2.5.zip
+Building wheels for collected packages: MySQL-Python
+  Running setup.py bdist_wheel for MySQL-Python ... error
+  Complete output from command /usr/bin/python -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-08qGNF/MySQL-Python/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" bdist_wheel -d /tmp/tmpCGIraTpip-wheel- --python-tag cp27:
+  usage: -c [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+     or: -c --help [cmd1 cmd2 ...]
+     or: -c --help-commands
+     or: -c cmd --help
+  error: invalid command 'bdist_wheel'
+  ----------------------------------------
+  Failed building wheel for MySQL-Python
+  Running setup.py clean for MySQL-Python
+Failed to build MySQL-Python
+Installing collected packages: MySQL-Python
+  Running setup.py install for MySQL-Python ... error
+    Complete output from command /usr/bin/python -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-08qGNF/MySQL-Python/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" install --record /tmp/pip-a44Vow-record/install-record.txt --single-version-externally-managed --compile:
+    running install
+    running build
+    running build_py
+    creating build
+    creating build/lib.linux-x86_64-2.7
+    copying _mysql_exceptions.py -> build/lib.linux-x86_64-2.7
+    creating build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/__init__.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/converters.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/connections.py -> build/lib.linux-x86_64-2.7/MySQLdb
+    copying MySQLdb/cursors.py -> build/lib.linux-x86_64-2.7/MySQLdb
+正在读取状态信息... 完成
+将会同时安装下列软件：
+  libexpat1-dev libpython-dev libpython2.7 libpython2.7-dev python2.7-dev
+下列【新】软件包将被安装：
+  libexpat1-dev libpython-dev libpython2.7 libpython2.7-dev python-dev python2.7-dev
+升级了 0 个软件包，新安装了 6 个软件包，要卸载 0 个软件包，有 13 个软件包未被升级。
+需要下载 29.7 MB 的归档。
+解压缩后会消耗 46.6 MB 的额外空间。
+获取:1 http://archive.ubuntu.com/ubuntu bionic/main amd64 libexpat1-dev amd64 2.2.5-3 [122 kB]
+获取:2 http://archive.ubuntu.com/ubuntu bionic/main amd64 libpython2.7 amd64 2.7.15~rc1-1 [1,053 kB]
+获取:3 http://archive.ubuntu.com/ubuntu bionic/main amd64 libpython2.7-dev amd64 2.7.15~rc1-1 [28.2 MB]
+获取:4 http://archive.ubuntu.com/ubuntu bionic/main amd64 libpython-dev amd64 2.7.15~rc1-1 [7,684 B]
+获取:5 http://archive.ubuntu.com/ubuntu bionic/main amd64 python2.7-dev amd64 2.7.15~rc1-1 [286 kB]
+获取:6 http://archive.ubuntu.com/ubuntu bionic/main amd64 python-dev amd64 2.7.15~rc1-1 [1,256 B]
+已下载 29.7 MB，耗时 5秒 (6,399 kB/s)
+正在选中未选择的软件包 libexpat1-dev:amd64。
+(正在读取数据库 ... 系统当前共安装有 110279 个文件和目录。)
+正准备解包 .../0-libexpat1-dev_2.2.5-3_amd64.deb  ...
+正在解包 libexpat1-dev:amd64 (2.2.5-3) ...
+正在选中未选择的软件包 libpython2.7:amd64。
+正准备解包 .../1-libpython2.7_2.7.15~rc1-1_amd64.deb  ...
+正在解包 libpython2.7:amd64 (2.7.15~rc1-1) ...
+正在选中未选择的软件包 libpython2.7-dev:amd64。
+正准备解包 .../2-libpython2.7-dev_2.7.15~rc1-1_amd64.deb  ...
+正在解包 libpython2.7-dev:amd64 (2.7.15~rc1-1) ...
+正在选中未选择的软件包 libpython-dev:amd64。
+正准备解包 .../3-libpython-dev_2.7.15~rc1-1_amd64.deb  ...
+正在解包 libpython-dev:amd64 (2.7.15~rc1-1) ...
+正在选中未选择的软件包 python2.7-dev。
+正准备解包 .../4-python2.7-dev_2.7.15~rc1-1_amd64.deb  ...
+正在解包 python2.7-dev (2.7.15~rc1-1) ...
+正在选中未选择的软件包 python-dev。
+正准备解包 .../5-python-dev_2.7.15~rc1-1_amd64.deb  ...
+正在解包 python-dev (2.7.15~rc1-1) ...
+正在处理用于 libc-bin (2.27-3ubuntu1) 的触发器 ...
+正在设置 libpython2.7:amd64 (2.7.15~rc1-1) ...
+正在设置 libexpat1-dev:amd64 (2.2.5-3) ...
+正在处理用于 man-db (2.8.3-2) 的触发器 ...
+正在设置 libpython2.7-dev:amd64 (2.7.15~rc1-1) ...
+正在设置 python2.7-dev (2.7.15~rc1-1) ...
+正在设置 libpython-dev:amd64 (2.7.15~rc1-1) ...
+正在设置 python-dev (2.7.15~rc1-1) ...
+正在处理用于 libc-bin (2.27-3ubuntu1) 的触发器 ...
